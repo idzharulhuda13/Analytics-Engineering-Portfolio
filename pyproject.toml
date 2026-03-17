@@ -1,0 +1,11 @@
+[project]
+name = "Analytics-Engineering-Portfolio"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "duckdb>=1.5.0",
+    "pandas>=2.3.3",
+    "plotly>=6.6.0",
+    "pypdf2>=3.0.1",
+    "streamlit>=1.55.0",
+]

@@ -1,0 +1,24 @@
+# Streamlit secrets
+.streamlit/secrets.toml
+
+# Python virtual environment
+.venv/
+env/
+venv/
+ENV/
+
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE settings
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Data files (optional, but good if they are large or private)
+# data/*.csv
