@@ -1,0 +1,13 @@
+name: 'chocolate_sales'
+version: '1.0.0'
+config-version: 2
+profile: 'chocolate_sales'
+
+model-paths: ["dbt_models"]
+target-path: "target"
+
+models:
+  chocolate_sales:
+    +materialized: view
+    mrt:
+      +materialized: table

@@ -20,5 +20,14 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Data files (optional, but good if they are large or private)
-# data/*.csv
+# Data files
+data/*.duckdb
+
+# dbt related
+target/
+dbt_packages/
+logs/
+profiles.yml
+
+# Other
+.user.yml
