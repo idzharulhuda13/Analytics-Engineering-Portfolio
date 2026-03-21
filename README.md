@@ -1,6 +1,6 @@
 # 🤖 Analytics Engineering Portfolio
 
-Welcome to my **Analytics Engineering & Data Science Portfolio**. This project showcases an end-to-end data application built with **Streamlit**, **DuckDB**, and **Plotly**, designed to provide interactive insights through specialized dashboards.
+Welcome to my **Analytics Engineering & Data Science Portfolio**. This project showcases an end-to-end data application built with **dbt**, **DuckDB**, and **Streamlit**, designed to provide interactive insights through specialized dashboards.
 
 ---
 
@@ -11,16 +11,18 @@ This repository features my professional journey and technical expertise, presen
 - **💼 Professional Portfolio:** An interactive resume powered by an in-memory DuckDB database, detailing my experience as an Analytics Engineer, AI Engineer, and Data Analyst.
 - **📊 Student Performance Dashboard:** Deep-dive analysis into educational datasets, exploring demographics, test preparations, and socioeconomic impacts on student scores.
 - **🚗 BMW Global Sales Dashboard:** A comprehensive market analysis of automotive sales from 2018–2025, featuring regional trends, model performance, and EV transition metrics.
+- **🍫 Chocolate Sales Datamart:** A professional dbt project featuring a robust **src -> dim -> mrt** architecture, processing raw parquet data into enriched analytical tables.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Framework:** [Streamlit](https://streamlit.io/) (Web UI & Interactivity)
+- **Modeling:** [dbt](https://www.getdbt.com/) (Data transformations & lineage)
 - **Database:** [DuckDB](https://duckdb.org/) (In-memory analytical processing)
-- **Data Handling:** [Pandas](https://pandas.pydata.org/)
+- **Storage:** [Parquet](https://parquet.apache.org/) (Highly optimized columnar storage)
+- **Framework:** [Streamlit](https://streamlit.io/) (Web UI & Interactivity)
 - **Visualization:** [Plotly](https://plotly.com/python/) (Dynamic & responsive charts)
-- **Styling:** Custom CSS with Glassmorphism and Premium Aesthetics
+- **Environment:** [uv](https://github.com/astral-sh/uv) (Fast Python dependency management)
 
 ---
 
@@ -29,15 +31,21 @@ This repository features my professional journey and technical expertise, presen
 ```text
 .
 ├── Resume.py                # Main application entry point (Portfolio/Bio)
-├── data/src/                # Raw datasets (CSV)
+├── dbt_models/              # dbt Architecture
+│   ├── src/                 # Staging layer (Raw parquet sources)
+│   ├── dim/                 # Dimension layer (Enriched business logic)
+│   └── mrt/                 # Mart layer (Final analytics-ready tables)
+├── data/src/                # Optimized source data
+│   ├── Chocolate Sales/     # .parquet files (Highly compressed)
 │   ├── StudentsPerformance.csv
 │   └── bmw_global_sales_2018_2025.csv
 ├── pages/                   # Multi-page dashboard modules
 │   ├── 1_Student_Performance.py
 │   └── 2_BMW_Global_Sales.py
 ├── .streamlit/              # Streamlit configuration
-├── pyproject.toml           # Dependency management (uv)
-└── requirements.txt         # Standard pip dependencies
+├── .vscode/                 # Pre-configured dbt Power User settings
+├── dbt_project.yml          # dbt configuration
+└── pyproject.toml           # Dependency management (uv)
 ```
 
 ---
@@ -47,7 +55,7 @@ This repository features my professional journey and technical expertise, presen
 ### Prerequisites
 
 - Python 3.11 or higher
-- [uv](https://github.com/astral-sh/uv) (recommended) or `pip`
+- [uv](https://github.com/astral-sh/uv) (recommended)
 
 ### Installation
 
@@ -58,25 +66,32 @@ This repository features my professional journey and technical expertise, presen
    ```
 
 2. **Install dependencies:**
-   Using `uv`:
    ```bash
    uv sync
    ```
-   Or using `pip`:
-   ```bash
-   pip install -r requirements.txt
-   ```
 
-3. **Run the application:**
-   ```bash
-   streamlit run Resume.py
-   ```
+### Running the Data Pipeline (dbt)
+
+To rebuild the analytical models from raw parquet data:
+```bash
+uv run dbt run --profiles-dir .
+```
+
+### Running the Web Application
+
+To launch the interactive Streamlit dashboard:
+```bash
+uv run streamlit run Resume.py
+```
 
 ---
 
-## 🛡️ Data & Privacy
+## 🛡️ Data Engineering Best Practices
 
-This portfolio uses DuckDB for fast, secure, and ephemeral data processing. No personal data is stored outside the localized session, ensuring a clean and performant user experience.
+This project implements modern data stack principles:
+- **Columnar Efficiency**: Raw CSVs were converted to **Parquet**, reducing storage size by **>70%** and improving DuckDB query performance.
+- **Dimensional Modeling**: Implemented a staged dbt architecture to ensure data quality and reusable business logic.
+- **Environment Isolation**: Uses `uv` for reproducible, isolated Python environments.
 
 ---
 
