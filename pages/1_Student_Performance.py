@@ -2,6 +2,10 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import duckdb
+from pathlib import Path
+
+ROOT = Path(__file__).parent.parent
 
 # ──────────────────────────────────────────────
 # Page Configuration
@@ -77,7 +81,9 @@ st.markdown("""
 # ──────────────────────────────────────────────
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data/StudentsPerformance.csv")
+    con = duckdb.connect(str(ROOT / "data" / "portfolio.duckdb"), read_only=True)
+    df = con.execute("SELECT * FROM src_student_performance").df()
+    con.close()
     # Add total and average scores
     df['total score'] = df['math score'] + df['reading score'] + df['writing score']
     df['average score'] = df['total score'] / 3

@@ -3,6 +3,9 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import duckdb
+from pathlib import Path
+
+ROOT = Path(__file__).parent.parent
 
 # ──────────────────────────────────────────────
 # Page Configuration
@@ -119,7 +122,10 @@ MONTH_MAP = {1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun",
 # ──────────────────────────────────────────────
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data/bmw_global_sales_2018_2025.csv")
+    con = duckdb.connect(str(ROOT / "data" / "portfolio.duckdb"), read_only=True)
+    df = con.execute("SELECT * FROM src_bmw_global_sales").df()
+    con.close()
+    
     df["Month_Name"] = df["Month"].map(MONTH_MAP)
     df["Date"] = pd.to_datetime(df["Year"].astype(str) + "-" + df["Month"].astype(str) + "-01")
     df["Revenue_EUR_B"] = df["Revenue_EUR"] / 1e9
@@ -128,7 +134,7 @@ def load_data():
 df = load_data()
 
 # ──────────────────────────────────────────────
-# DuckDB for fast analytics
+# DuckDB for fast analytics (Reusing existing in-memory for dashboard logic)
 # ──────────────────────────────────────────────
 @st.cache_resource
 def init_db():
