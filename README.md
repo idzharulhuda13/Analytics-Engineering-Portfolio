@@ -29,7 +29,7 @@ This repository features my professional journey and technical expertise, presen
 ```text
 .
 ├── Resume.py                # Main application entry point (Portfolio/Bio)
-├── data/                    # Raw datasets (CSV)
+├── data/src/                # Raw datasets (CSV)
 │   ├── StudentsPerformance.csv
 │   └── bmw_global_sales_2018_2025.csv
 ├── pages/                   # Multi-page dashboard modules
