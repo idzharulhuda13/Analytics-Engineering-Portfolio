@@ -1,1 +1,1 @@
-SELECT * FROM read_csv_auto('data/src/Chocolate Sales/calendar.csv')
+SELECT * FROM 'data/src/Chocolate Sales/calendar.parquet'
