@@ -283,7 +283,7 @@ if not filtered_df.empty:
             ))
             fig_units.update_layout(title="Annual Units Sold", yaxis_title="Units Sold")
             apply_theme(fig_units)
-            st.plotly_chart(fig_units, width="stretch")
+            st.plotly_chart(fig_units, use_container_width=True)
 
         with col2:
             fig_rev = go.Figure()
@@ -298,7 +298,7 @@ if not filtered_df.empty:
             ))
             fig_rev.update_layout(title="Annual Revenue (EUR Billions)", yaxis_title="Revenue (€B)")
             apply_theme(fig_rev)
-            st.plotly_chart(fig_rev, width="stretch")
+            st.plotly_chart(fig_rev, use_container_width=True)
 
         st.divider()
         st.subheader("Monthly Sales Trend Over Time")
@@ -324,7 +324,7 @@ if not filtered_df.empty:
         ))
         fig_monthly.update_layout(title="Monthly Units Sold", yaxis_title="Units Sold", xaxis_title="")
         apply_theme(fig_monthly, 400)
-        st.plotly_chart(fig_monthly, width="stretch")
+        st.plotly_chart(fig_monthly, use_container_width=True)
 
     # ──────────────────────────────────────────
     # TAB 2: Regional Analysis
@@ -357,7 +357,7 @@ if not filtered_df.empty:
             )])
             fig_pie.update_layout(title="Units Sold Share by Region")
             apply_theme(fig_pie)
-            st.plotly_chart(fig_pie, width="stretch")
+            st.plotly_chart(fig_pie, use_container_width=True)
 
         with col_r2:
             fig_rev_region = px.bar(
@@ -369,7 +369,7 @@ if not filtered_df.empty:
             )
             fig_rev_region.update_layout(showlegend=False)
             apply_theme(fig_rev_region)
-            st.plotly_chart(fig_rev_region, width="stretch")
+            st.plotly_chart(fig_rev_region, use_container_width=True)
 
         st.divider()
         st.subheader("Regional Trend Over Years")
@@ -391,7 +391,7 @@ if not filtered_df.empty:
         )
         fig_region_trend.update_layout(yaxis_title="Units Sold", xaxis_title="")
         apply_theme(fig_region_trend, 420)
-        st.plotly_chart(fig_region_trend, width="stretch")
+        st.plotly_chart(fig_region_trend, use_container_width=True)
 
         st.divider()
         st.subheader("Average Price by Region")
@@ -412,7 +412,7 @@ if not filtered_df.empty:
         )
         fig_price_region.update_layout(yaxis_title="Average Price (EUR)", xaxis_title="")
         apply_theme(fig_price_region, 400)
-        st.plotly_chart(fig_price_region, width="stretch")
+        st.plotly_chart(fig_price_region, use_container_width=True)
 
     # ──────────────────────────────────────────
     # TAB 3: Model Deep-Dive
@@ -444,7 +444,7 @@ if not filtered_df.empty:
             )])
             fig_model_bar.update_layout(title="Total Units Sold by Model", yaxis_title="Units Sold")
             apply_theme(fig_model_bar)
-            st.plotly_chart(fig_model_bar, width="stretch")
+            st.plotly_chart(fig_model_bar, use_container_width=True)
 
         with col_m2:
             colors_rev = [MODEL_COLORS.get(m, "#6b7280") for m in model_totals["Model"]]
@@ -456,7 +456,7 @@ if not filtered_df.empty:
             )])
             fig_model_rev.update_layout(title="Total Revenue by Model (€B)", yaxis_title="Revenue (€B)")
             apply_theme(fig_model_rev)
-            st.plotly_chart(fig_model_rev, width="stretch")
+            st.plotly_chart(fig_model_rev, use_container_width=True)
 
         st.divider()
         st.subheader("Model Sales Trend Over Years")
@@ -478,7 +478,7 @@ if not filtered_df.empty:
         )
         fig_model_trend.update_layout(yaxis_title="Units Sold", xaxis_title="")
         apply_theme(fig_model_trend, 420)
-        st.plotly_chart(fig_model_trend, width="stretch")
+        st.plotly_chart(fig_model_trend, use_container_width=True)
 
         st.divider()
         st.subheader("Model × Region Heatmap")
@@ -506,7 +506,7 @@ if not filtered_df.empty:
         ))
         fig_heatmap.update_layout(title="Units Sold: Model × Region", xaxis_title="Region", yaxis_title="Model")
         apply_theme(fig_heatmap, 420)
-        st.plotly_chart(fig_heatmap, width="stretch")
+        st.plotly_chart(fig_heatmap, use_container_width=True)
 
     # ──────────────────────────────────────────
     # TAB 4: EV & Market Trends
@@ -540,7 +540,7 @@ if not filtered_df.empty:
             ))
             fig_bev.update_layout(title="Average BEV Share Over Years", yaxis_title="BEV Share (%)")
             apply_theme(fig_bev)
-            st.plotly_chart(fig_bev, width="stretch")
+            st.plotly_chart(fig_bev, use_container_width=True)
 
         with col_e2:
             bev_region = con.execute("""
@@ -560,7 +560,7 @@ if not filtered_df.empty:
             )
             fig_bev_region.update_layout(yaxis_title="BEV Share (%)")
             apply_theme(fig_bev_region)
-            st.plotly_chart(fig_bev_region, width="stretch")
+            st.plotly_chart(fig_bev_region, use_container_width=True)
 
         st.divider()
         st.subheader("Macro-Economic Indicators")
@@ -585,7 +585,7 @@ if not filtered_df.empty:
             )
             fig_gdp.update_layout(yaxis_title="GDP Growth (%)")
             apply_theme(fig_gdp)
-            st.plotly_chart(fig_gdp, width="stretch")
+            st.plotly_chart(fig_gdp, use_container_width=True)
 
         with col_m2:
             fuel_data = con.execute("""
@@ -605,7 +605,7 @@ if not filtered_df.empty:
             )
             fig_fuel.update_layout(yaxis_title="Fuel Price Index")
             apply_theme(fig_fuel)
-            st.plotly_chart(fig_fuel, width="stretch")
+            st.plotly_chart(fig_fuel, use_container_width=True)
 
         st.divider()
         st.subheader("Premium Share Trend")
@@ -626,7 +626,7 @@ if not filtered_df.empty:
         )
         fig_premium.update_layout(yaxis_title="Premium Share (%)")
         apply_theme(fig_premium, 400)
-        st.plotly_chart(fig_premium, width="stretch")
+        st.plotly_chart(fig_premium, use_container_width=True)
 
     # ──────────────────────────────────────────
     # TAB 5: Raw Data
@@ -640,7 +640,7 @@ if not filtered_df.empty:
         display_df = display_df.sort_values(by=["Year", "Region", "Model"]).reset_index(drop=True)
         display_df.index += 1
 
-        st.dataframe(display_df, width="stretch", height=500)
+        st.dataframe(display_df, use_container_width=True, height=500)
 
         # Download button
         csv = filtered_df.to_csv(index=False)

@@ -164,7 +164,7 @@ with col1:
                              title=f"Distribution of {score_type.title()}",
                              color_discrete_sequence=["#4f46e5", "#ec4899"])
     update_plot_theme(fig_dist)
-    st.plotly_chart(fig_dist, width="stretch")
+    st.plotly_chart(fig_dist, use_container_width=True)
 
 with col2:
     st.subheader("Correlation Analysis")
@@ -181,7 +181,7 @@ with col2:
                              title=f"{x_axis.replace(' score', '').title()} vs {y_axis.replace(' score', '').title()} Scores",
                              color_discrete_sequence=["#4f46e5", "#10b981"])
     update_plot_theme(fig_scatter)
-    st.plotly_chart(fig_scatter, width="stretch")
+    st.plotly_chart(fig_scatter, use_container_width=True)
 
 st.divider()
 
@@ -194,7 +194,7 @@ with col3:
                      color_discrete_sequence=["#4f46e5", "#ec4899"])
     update_plot_theme(fig_box)
     fig_box.update_layout(xaxis={'categoryorder':'total descending'})
-    st.plotly_chart(fig_box, width="stretch")
+    st.plotly_chart(fig_box, use_container_width=True)
 
 with col4:
     test_prep_avg = filtered_df.groupby("test preparation course")["average score"].mean().reset_index()
@@ -203,7 +203,7 @@ with col4:
                      color="test preparation course",
                      color_discrete_sequence=["#4f46e5", "#10b981"])
     update_plot_theme(fig_bar)
-    st.plotly_chart(fig_bar, width="stretch")
+    st.plotly_chart(fig_bar, use_container_width=True)
 
 st.divider()
 
@@ -216,7 +216,7 @@ top_performers = filtered_df.sort_values(by="average score", ascending=False).he
 top_performers = top_performers.reset_index(drop=True)
 top_performers.index += 1 # 1-based ranking index
 
-st.dataframe(top_performers, width="stretch")
+st.dataframe(top_performers, use_container_width=True)
 st.divider()
 
 st.subheader("💡 Key Insights")
