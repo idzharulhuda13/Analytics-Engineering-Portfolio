@@ -77,7 +77,7 @@ st.markdown("""
 # ──────────────────────────────────────────────
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data/src/StudentsPerformance.csv")
+    df = pd.read_csv("data/StudentsPerformance.csv")
     # Add total and average scores
     df['total score'] = df['math score'] + df['reading score'] + df['writing score']
     df['average score'] = df['total score'] / 3

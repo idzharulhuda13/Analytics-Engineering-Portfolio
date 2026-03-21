@@ -119,7 +119,7 @@ MONTH_MAP = {1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun",
 # ──────────────────────────────────────────────
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data/src/bmw_global_sales_2018_2025.csv")
+    df = pd.read_csv("data/bmw_global_sales_2018_2025.csv")
     df["Month_Name"] = df["Month"].map(MONTH_MAP)
     df["Date"] = pd.to_datetime(df["Year"].astype(str) + "-" + df["Month"].astype(str) + "-01")
     df["Revenue_EUR_B"] = df["Revenue_EUR"] / 1e9

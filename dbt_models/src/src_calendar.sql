@@ -1,1 +1,1 @@
-SELECT * FROM 'data/src/Chocolate Sales/calendar.parquet'
+SELECT * FROM 'data/Chocolate Sales/calendar.parquet'

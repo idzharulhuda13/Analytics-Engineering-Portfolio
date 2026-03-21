@@ -35,7 +35,7 @@ This repository features my professional journey and technical expertise, presen
 │   ├── src/                 # Staging layer (Raw parquet sources)
 │   ├── dim/                 # Dimension layer (Enriched business logic)
 │   └── mrt/                 # Mart layer (Final analytics-ready tables)
-├── data/src/                # Optimized source data
+├── data/                    # Optimized source data
 │   ├── Chocolate Sales/     # .parquet files (Highly compressed)
 │   ├── StudentsPerformance.csv
 │   └── bmw_global_sales_2018_2025.csv
