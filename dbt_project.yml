@@ -1,13 +1,13 @@
-name: 'chocolate_sales'
+name: 'analytics_portfolio'
 version: '1.0.0'
 config-version: 2
-profile: 'chocolate_sales'
+profile: 'analytics_portfolio'
 
 model-paths: ["dbt_models"]
 target-path: "target"
 
 models:
-  chocolate_sales:
+  analytics_portfolio:
     +materialized: view
     mrt:
       +materialized: table
