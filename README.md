@@ -9,6 +9,7 @@ Welcome to my **Analytics Engineering & Data Science Portfolio**. This project s
 This repository features my professional journey and technical expertise, presented as a high-performance web application. It integrates several data-driven modules:
 
 - **💼 Professional Portfolio:** An interactive resume powered by an in-memory DuckDB database, detailing my experience as an Analytics Engineer, AI Engineer, and Data Analyst.
+- **🎓 Student Performance Data Story:** An interactive analytical narrative exploring how demographics, test preparation, and socioeconomics impact student success, featuring dynamic real-time insights calculation.
 - **🍫 Chocolate Sales Datamart:** A professional dbt project featuring a robust **src -> dim -> mrt** architecture, processing raw parquet data into enriched analytical tables.
 
 ---
@@ -34,7 +35,7 @@ This repository features my professional journey and technical expertise, presen
 │   ├── dim/                 # Dimension layer (Enriched business logic)
 │   └── mrt/                 # Mart layer (Final analytics-ready tables)
 ├── data/                    # Optimized source data
-├── pages/                   # Multi-page dashboard modules (Coming soon)
+├── pages/                   # Multi-page dashboard modules (Interactive Data Stories)
 ├── .streamlit/              # Streamlit configuration
 ├── .vscode/                 # Pre-configured dbt Power User settings
 ├── dbt_project.yml          # dbt configuration
