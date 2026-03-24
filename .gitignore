@@ -32,3 +32,7 @@ profiles.yml
 # Other
 .user.yml
 LLM.md
+
+# AI Agent Configuration
+.agents/
+.gemini/
