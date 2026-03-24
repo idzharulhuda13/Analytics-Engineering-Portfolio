@@ -1,21 +1,20 @@
 import streamlit as st
 import duckdb
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
+import altair as alt
 
 st.set_page_config(page_title="Student Performance Dashboard", page_icon="📈", layout="wide")
 
 # Custom CSS for cards
 st.markdown("""
 <style>
+    /* Metric Cards Styling (Flat Design) */
     .metric-card {
         background-color: #ffffff;
         border: 1px solid #e2e8f0;
         border-radius: 12px;
-        padding: 20px;
+        padding: 24px;
         text-align: center;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .metric-card:hover {
@@ -24,15 +23,33 @@ st.markdown("""
     }
     .metric-title {
         color: #64748b;
-        font-size: 1rem;
+        font-size: 0.9rem;
         font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
         margin-bottom: 8px;
     }
     .metric-value {
         color: #0f172a;
-        font-size: 2.2rem;
+        font-size: 2.5rem;
         font-weight: 800;
     }
+    
+    /* Clean Streamlit's container(border=True) with flat design - Main area only */
+    [data-testid="stMain"] [data-testid="stVerticalBlockBorderWrapper"] {
+        background-color: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        padding: 24px !important;
+        margin-bottom: 2rem !important;
+        transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    }
+    
+    [data-testid="stMain"] [data-testid="stVerticalBlockBorderWrapper"]:hover {
+        transform: translateY(-4px) !important;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1) !important;
+    }
+    
     [data-testid="stAppViewContainer"], .main {
         background-color: #f8fafc;
     }
@@ -80,43 +97,34 @@ st.markdown("<br>", unsafe_allow_html=True)
 col_l, col_r = st.columns((1, 1), gap="large")
 
 with col_l:
-    st.subheader("📊 Score Distribution")
-    dist_subject = st.selectbox("Select Subject", ["math_score", "reading_score", "writing_score", "avg_score"], format_func=lambda x: x.replace('_', ' ').title())
-    
-    fig_hist = px.histogram(
-        df, x=dist_subject, nbins=30, 
-        marginal="box",
-        color_discrete_sequence=['#4f46e5'],
-    )
-    fig_hist.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)', 
-        paper_bgcolor='rgba(0,0,0,0)', 
-        margin=dict(t=20, b=10, l=10, r=10),
-        xaxis_title="Score",
-        yaxis_title="Count"
-    )
-    st.plotly_chart(fig_hist, use_container_width=True)
+    with st.container(border=True):
+        st.subheader("📊 Score Distribution")
+        dist_subject = st.selectbox("Select Subject", ["math_score", "reading_score", "writing_score", "avg_score"], format_func=lambda x: x.replace('_', ' ').title())
+        
+        # Altair Histogram
+        hist = alt.Chart(df).mark_bar(color='#4f46e5').encode(
+            x=alt.X(f"{dist_subject}:Q", bin=alt.Bin(maxbins=30), title="Score"),
+            y=alt.Y('count()', title="Count")
+        ).properties(height=300)
+        
+        st.altair_chart(hist, use_container_width=True)
 
 with col_r:
-    st.subheader("📚 Test Preparation Impact")
-    prep_df = df.groupby('test_prep')[['math_score', 'reading_score', 'writing_score']].mean().reset_index()
-    prep_melted = prep_df.melt(id_vars='test_prep', var_name='Subject', value_name='Average Score')
-    prep_melted['Subject'] = prep_melted['Subject'].str.replace('_score', '').str.title()
-    
-    fig_prep = px.bar(
-        prep_melted, x='Subject', y='Average Score', color='test_prep', barmode='group',
-        color_discrete_map={"none": "#94a3b8", "completed": "#10b981"},
-        text_auto=".1f"
-    )
-    fig_prep.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)', 
-        paper_bgcolor='rgba(0,0,0,0)', 
-        margin=dict(t=20, b=10, l=10, r=10),
-        xaxis_title="Subject",
-        yaxis_title="Average Score",
-        legend_title="Test Prep"
-    )
-    st.plotly_chart(fig_prep, use_container_width=True)
+    with st.container(border=True):
+        st.subheader("📚 Test Preparation Impact")
+        prep_df = df.groupby('test_prep')[['math_score', 'reading_score', 'writing_score']].mean().reset_index()
+        prep_melted = prep_df.melt(id_vars='test_prep', var_name='Subject', value_name='Average Score')
+        prep_melted['Subject'] = prep_melted['Subject'].str.replace('_score', '').str.title()
+        
+        # Altair Grouped Bar Chart
+        bar_prep = alt.Chart(prep_melted).mark_bar().encode(
+            x=alt.X('Subject:N', title="Subject"),
+            y=alt.Y('Average Score:Q', title="Average Score"),
+            color=alt.Color('test_prep:N', scale=alt.Scale(domain=['none', 'completed'], range=['#94a3b8', '#10b981']), title="Test Preparation"),
+            xOffset='test_prep:N'
+        ).properties(height=300)
+        
+        st.altair_chart(bar_prep, use_container_width=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
 
@@ -124,58 +132,60 @@ st.markdown("<br>", unsafe_allow_html=True)
 col_bl, col_br = st.columns((1, 1), gap="large")
 
 with col_bl:
-    st.subheader("🍎 Impact of Lunch Type")
-    fig_lunch = px.box(
-        df, x='lunch', y='avg_score', color='lunch', 
-        color_discrete_map={"standard": "#0ea5e9", "free/reduced": "#f59e0b"},
-        points="all"
-    )
-    fig_lunch.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)', 
-        paper_bgcolor='rgba(0,0,0,0)', 
-        margin=dict(t=20, b=10, l=10, r=10),
-        xaxis_title="Lunch Type",
-        yaxis_title="Average Score",
-        showlegend=False
-    )
-    st.plotly_chart(fig_lunch, use_container_width=True)
+    with st.container(border=True):
+        st.subheader("🍎 Impact of Lunch Type")
+        # Altair Box Plot
+        box_lunch = alt.Chart(df).mark_boxplot(extent='min-max').encode(
+            x=alt.X('lunch:N', title="Lunch Type"),
+            y=alt.Y('avg_score:Q', title="Average Score"),
+            color=alt.Color('lunch:N', scale=alt.Scale(domain=['standard', 'free/reduced'], range=['#0ea5e9', '#f59e0b']), legend=None)
+        ).properties(height=300)
+        
+        st.altair_chart(box_lunch, use_container_width=True)
 
 with col_br:
-    st.subheader("🎓 Parental Education Influence")
-    # Order by average score
-    edu_df = df.groupby('parental_education')['avg_score'].mean().sort_values().reset_index()
-    fig_edu = px.bar(
-        edu_df, y='parental_education', x='avg_score', orientation='h',
-        color='avg_score', color_continuous_scale="fall",
-        text_auto=".1f"
-    )
-    fig_edu.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)', 
-        paper_bgcolor='rgba(0,0,0,0)', 
-        margin=dict(t=20, b=10, l=10, r=10),
-        xaxis_title="Average Score",
-        yaxis_title="Parental Education Level",
-        coloraxis_showscale=False
-    )
-    st.plotly_chart(fig_edu, use_container_width=True)
+    with st.container(border=True):
+        st.subheader("🎓 Parental Education Influence")
+        edu_df = df.groupby('parental_education')['avg_score'].mean().reset_index()
+        
+        # Altair Horizontal Bar Chart
+        bar_edu = alt.Chart(edu_df).mark_bar().encode(
+            y=alt.Y('parental_education:N', sort='-x', title="Parental Education Level"),
+            x=alt.X('avg_score:Q', title="Average Score"),
+            color=alt.Color('avg_score:Q', scale=alt.Scale(scheme='oranges'), legend=None)
+        ).properties(height=300)
+        
+        st.altair_chart(bar_edu, use_container_width=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
-st.subheader("👥 Performance by Gender & Race/Ethnicity")
 
-# Heatmap of Avg Score across Gender and Race/Ethnicity
-heat_df = df.groupby(['gender', 'race_ethnicity'])['avg_score'].mean().unstack().round(1)
-fig_heat = px.imshow(
-    heat_df, text_auto=True, aspect="auto",
-    color_continuous_scale="oxy"
-)
-fig_heat.update_layout(
-    plot_bgcolor='rgba(0,0,0,0)', 
-    paper_bgcolor='rgba(0,0,0,0)', 
-    margin=dict(t=20, b=10, l=10, r=10),
-    xaxis_title="Race / Ethnicity",
-    yaxis_title="Gender"
-)
-st.plotly_chart(fig_heat, use_container_width=True)
+with st.container(border=True):
+    st.subheader("👥 Performance by Gender & Race/Ethnicity")
+
+    # Altair Heatmap
+    heat_chart = alt.Chart(df).mark_rect().encode(
+        x=alt.X('race_ethnicity:N', title="Race / Ethnicity"),
+        y=alt.Y('gender:N', title="Gender"),
+        color=alt.Color('mean(avg_score):Q', scale=alt.Scale(scheme='viridis'), title="Avg Score"),
+        tooltip=['race_ethnicity:N', 'gender:N', 'mean(avg_score):Q']
+    ).properties(height=300)
+
+    # Add text labels to heatmap
+    text = alt.Chart(df).transform_aggregate(
+        mean_avg_score='mean(avg_score)',
+        groupby=['race_ethnicity', 'gender']
+    ).mark_text().encode(
+        x=alt.X('race_ethnicity:N'),
+        y=alt.Y('gender:N'),
+        text=alt.Text('mean_avg_score:Q', format='.1f'),
+        color=alt.condition(
+            alt.datum['mean_avg_score'] > 70,
+            alt.value('black'),
+            alt.value('white')
+        )
+    )
+
+    st.altair_chart(heat_chart + text, use_container_width=True)
 
 st.divider()
-st.caption("Insights generated automatically using Streamlit, DuckDB, and Plotly.")
+st.caption("Insights generated automatically using Streamlit, DuckDB, and Altair.")

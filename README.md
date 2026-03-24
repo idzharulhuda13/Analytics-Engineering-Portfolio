@@ -19,7 +19,7 @@ This repository features my professional journey and technical expertise, presen
 - **Database:** [DuckDB](https://duckdb.org/) (In-memory analytical processing)
 - **Storage:** [Parquet](https://parquet.apache.org/) (Highly optimized columnar storage)
 - **Framework:** [Streamlit](https://streamlit.io/) (Web UI & Interactivity)
-- **Visualization:** [Plotly](https://plotly.com/python/) (Dynamic & responsive charts)
+- **Visualization:** [Altair](https://altair-viz.github.io/) (Declarative statistical visualization)
 - **Environment:** [uv](https://github.com/astral-sh/uv) (Fast Python dependency management)
 
 ---
