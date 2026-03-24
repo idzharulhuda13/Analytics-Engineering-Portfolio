@@ -3,53 +3,16 @@ import duckdb
 import pandas as pd
 import altair as alt
 
+from components.cards import inject_floating_card_css, metric_card, chart_container
+
 st.set_page_config(page_title="Student Performance Dashboard", page_icon="📈", layout="wide")
 
-# Custom CSS for cards
+# Inject shared floating-card CSS (includes metric-card + container hover)
+inject_floating_card_css()
+
+# Page-specific styles
 st.markdown("""
 <style>
-    /* Metric Cards Styling (Flat Design) */
-    .metric-card {
-        background-color: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 24px;
-        text-align: center;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .metric-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-    }
-    .metric-title {
-        color: #64748b;
-        font-size: 0.9rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 8px;
-    }
-    .metric-value {
-        color: #0f172a;
-        font-size: 2.5rem;
-        font-weight: 800;
-    }
-    
-    /* Clean Streamlit's container(border=True) with flat design - Main area only */
-    [data-testid="stMain"] [data-testid="stVerticalBlockBorderWrapper"] {
-        background-color: #ffffff !important;
-        border: 1px solid #e2e8f0 !important;
-        border-radius: 12px !important;
-        padding: 24px !important;
-        margin-bottom: 2rem !important;
-        transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-    }
-    
-    [data-testid="stMain"] [data-testid="stVerticalBlockBorderWrapper"]:hover {
-        transform: translateY(-4px) !important;
-        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1) !important;
-    }
-    
     [data-testid="stAppViewContainer"], .main {
         background-color: #f8fafc;
     }
@@ -83,13 +46,13 @@ avg_writing = df['writing_score'].mean()
 avg_overall = df['avg_score'].mean()
 
 with col1:
-    st.markdown(f'<div class="metric-card"><div class="metric-title">Total Students</div><div class="metric-value">{total_students:,}</div></div>', unsafe_allow_html=True)
+    metric_card("Total Students", f"{total_students:,}")
 with col2:
-    st.markdown(f'<div class="metric-card"><div class="metric-title">Avg Math Score</div><div class="metric-value">{avg_math:.1f}</div></div>', unsafe_allow_html=True)
+    metric_card("Avg Math Score", f"{avg_math:.1f}")
 with col3:
-    st.markdown(f'<div class="metric-card"><div class="metric-title">Avg Reading Score</div><div class="metric-value">{avg_reading:.1f}</div></div>', unsafe_allow_html=True)
+    metric_card("Avg Reading Score", f"{avg_reading:.1f}")
 with col4:
-    st.markdown(f'<div class="metric-card"><div class="metric-title">Avg Overall Score</div><div class="metric-value">{avg_overall:.1f}</div></div>', unsafe_allow_html=True)
+    metric_card("Avg Overall Score", f"{avg_overall:.1f}")
 
 st.markdown("<br>", unsafe_allow_html=True)
 
@@ -97,7 +60,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 col_l, col_r = st.columns((1, 1), gap="large")
 
 with col_l:
-    with st.container(border=True):
+    with chart_container():
         st.subheader("📊 Score Distribution")
         dist_subject = st.selectbox("Select Subject", ["math_score", "reading_score", "writing_score", "avg_score"], format_func=lambda x: x.replace('_', ' ').title())
         
@@ -110,7 +73,7 @@ with col_l:
         st.altair_chart(hist, use_container_width=True)
 
 with col_r:
-    with st.container(border=True):
+    with chart_container():
         st.subheader("📚 Test Preparation Impact")
         prep_df = df.groupby('test_prep')[['math_score', 'reading_score', 'writing_score']].mean().reset_index()
         prep_melted = prep_df.melt(id_vars='test_prep', var_name='Subject', value_name='Average Score')
@@ -132,7 +95,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 col_bl, col_br = st.columns((1, 1), gap="large")
 
 with col_bl:
-    with st.container(border=True):
+    with chart_container():
         st.subheader("🍎 Impact of Lunch Type")
         # Altair Box Plot
         box_lunch = alt.Chart(df).mark_boxplot(extent='min-max').encode(
@@ -144,7 +107,7 @@ with col_bl:
         st.altair_chart(box_lunch, use_container_width=True)
 
 with col_br:
-    with st.container(border=True):
+    with chart_container():
         st.subheader("🎓 Parental Education Influence")
         edu_df = df.groupby('parental_education')['avg_score'].mean().reset_index()
         
@@ -159,7 +122,7 @@ with col_br:
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-with st.container(border=True):
+with chart_container():
     st.subheader("👥 Performance by Gender & Race/Ethnicity")
 
     # Altair Heatmap

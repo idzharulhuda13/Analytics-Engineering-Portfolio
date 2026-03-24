@@ -3,6 +3,8 @@ import duckdb
 import pandas as pd
 import json
 
+from components.cards import inject_floating_card_css, floating_card
+
 # ──────────────────────────────────────────────
 # Page Configuration
 # ──────────────────────────────────────────────
@@ -87,9 +89,12 @@ profile = get_profile()
 # ──────────────────────────────────────────────
 # Styles
 # ──────────────────────────────────────────────
+# Inject shared floating-card CSS
+inject_floating_card_css()
+
+# Page-specific styles
 st.markdown("""
     <style>
-    /* Force light background and typography */
     [data-testid="stAppViewContainer"], .main { background-color: #f8fafc; }
     [data-testid="stSidebar"] { background-color: #ffffff; }
     [data-testid="stHeader"] { background-color: transparent; }
@@ -98,28 +103,6 @@ st.markdown("""
     .stTabs [data-baseweb="tab-list"] { padding-bottom: 1rem; }
     .stTabs [data-baseweb="tab"] { color: #475569; }
     .stTabs [aria-selected="true"] { color: #4f46e5 !important; }
-
-    /* Floating card */
-    .floating-card {
-        background-color: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 14px;
-        padding: 1.5rem;
-        margin-bottom: 1.2rem;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .floating-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
-    }
-
-    .exp-title { color: #0f172a !important; font-weight: 700; font-size: 1.2rem; margin-bottom: 0.2rem; }
-    .exp-company { color: #4f46e5 !important; font-weight: 600; font-size: 1.1rem; }
-    .exp-meta { color: #64748b !important; font-size: 0.9rem; margin-bottom: 0.8rem; }
-    .resume-bullet { margin-bottom: 0.5rem; line-height: 1.5; color: #334155; }
-    .social-link { text-decoration: none; color: #4f46e5 !important; font-weight: 600; margin-right: 15px; }
-    .skill-tag { background: #e0e7ff; color: #4f46e5 !important; padding: 2px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; display: inline-block; margin: 2px 4px 2px 0; border: 1px solid #c7d2fe; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -140,7 +123,7 @@ with st.sidebar:
 # Header / Hero
 # ──────────────────────────────────────────────
 st.title(f"Hi, I'm {profile['name'].split()[0]} 👋")
-st.markdown(f"<div class='floating-card'>{profile['bio']}</div>", unsafe_allow_html=True)
+floating_card(profile['bio'])
 
 st.divider()
 
@@ -162,61 +145,49 @@ with tab_exp:
         bullets = json.loads(row['bullets'])
         bullets_html = "".join([f"<li class='resume-bullet'>{b}</li>" for b in bullets])
         skills_html = "".join([f"<span class='skill-tag'>{s.strip()}</span>" for s in row['skills'].split(',')])
-        card_html = f"""
-        <div class='floating-card'>
+        floating_card(f"""
             <div class='exp-title'>{row['role']}</div>
             <div class='exp-company'>{row['company']}</div>
             <div class='exp-meta'>{row['location']} | {row['period']}</div>
             <ul>{bullets_html}</ul>
             <div style='margin-top: 10px;'>{skills_html}</div>
-        </div>
-        """
-        st.markdown(card_html, unsafe_allow_html=True)
+        """)
 
 with tab_skills:
     st.subheader("Skills")
     skills_data = con.execute("SELECT category, skills_list FROM skills").df()
     for _, row in skills_data.iterrows():
-        st.markdown(f"<div class='floating-card'><strong>{row['category']}:</strong> {row['skills_list']}</div>", unsafe_allow_html=True)
+        floating_card(f"<strong>{row['category']}:</strong> {row['skills_list']}")
 
 with tab_edu:
     st.subheader("Education")
     edu = con.execute("SELECT * FROM education").fetchone()
     if edu:
-        edu_html = f"""
-        <div class='floating-card'>
+        floating_card(f"""
             <strong>{edu[1]}</strong><br>
             <em>{edu[0]}</em> | {edu[2]} | {edu[3]}<br><br>
             {edu[4]}
-        </div>
-        """
-        st.markdown(edu_html, unsafe_allow_html=True)
+        """)
 
 with tab_proj:
     st.subheader("Projects")
     projects = con.execute("SELECT title, description, skills FROM projects").fetchall()
     for title, desc, skills in projects:
         skills_html = "".join([f"<span class='skill-tag'>{s.strip()}</span>" for s in skills.split(',')])
-        proj_html = f"""
-        <div class='floating-card'>
+        floating_card(f"""
             <strong>{title}</strong><br>
             {desc}
             <div style='margin-top: 10px;'>{skills_html}</div>
-        </div>
-        """
-        st.markdown(proj_html, unsafe_allow_html=True)
+        """)
 
 with tab_cert:
     st.subheader("Certifications")
     certs = con.execute("SELECT title, description FROM certifications").fetchall()
     for title, desc in certs:
-        cert_html = f"""
-        <div class='floating-card'>
+        floating_card(f"""
             <strong>{title}</strong><br>
             {desc}
-        </div>
-        """
-        st.markdown(cert_html, unsafe_allow_html=True)
+        """)
 
 # Footer
 st.divider()
