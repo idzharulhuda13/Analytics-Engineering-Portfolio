@@ -64,6 +64,24 @@ _FLOATING_CARD_CSS = """
     font-size: 2.5rem;
     font-weight: 800;
 }
+.metric-delta {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+.metric-delta.positive {
+    color: #10b981;
+}
+.metric-delta.negative {
+    color: #ef4444;
+}
+.metric-delta.normal {
+    color: #64748b;
+}
 
 /* ── Shared helper classes ── */
 .exp-title   { color: #0f172a !important; font-weight: 700; font-size: 1.2rem; margin-bottom: 0.2rem; }
@@ -118,7 +136,7 @@ def floating_card(content_html: str) -> None:
     )
 
 
-def metric_card(title: str, value: str) -> None:
+def metric_card(title: str, value: str, delta: str = None, delta_color: str = "normal") -> None:
     """Render a centred metric / KPI card.
 
     Parameters
@@ -127,14 +145,21 @@ def metric_card(title: str, value: str) -> None:
         Small uppercase label shown above the value.
     value : str
         The big number or text to display prominently.
+    delta : str, optional
+        A supplemental value indicating a change or comparison.
+    delta_color : str, optional
+        Color formatting for delta ('positive', 'negative', or 'normal').
     """
-    st.markdown(
+    html = (
         f'<div class="metric-card">'
         f'<div class="metric-title">{title}</div>'
         f'<div class="metric-value">{value}</div>'
-        f'</div>',
-        unsafe_allow_html=True,
     )
+    if delta:
+        html += f'<div class="metric-delta {delta_color}">{delta}</div>'
+    
+    html += '</div>'
+    st.markdown(html, unsafe_allow_html=True)
 
 def chart_container():
     """Create a floating chart container.
