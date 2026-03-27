@@ -68,15 +68,33 @@ This repository features my professional journey and technical expertise, presen
 
 To rebuild the analytical models from raw parquet data:
 ```bash
-uv run dbt run --profiles-dir .
+make run
 ```
 
 ### Running the Web Application
 
 To launch the interactive Streamlit dashboard:
 ```bash
-uv run streamlit run Resume.py
+make app
 ```
+
+---
+
+## 🛠️ Makefile Commands
+
+For convenience, a `Makefile` is provided to streamline common development tasks:
+
+| Command         | Action                                                 |
+|-----------------|--------------------------------------------------------|
+| `make help`     | Show help menu with all available commands             |
+| `make install`  | Install dependencies using `uv sync`                   |
+| `make app`      | Launch the Streamlit application                       |
+| `make run`      | Run all dbt models (`src` -> `dim` -> `mrt`)           |
+| `make test`     | Run dbt data and schema tests                          |
+| `make build`    | Run `dbt build` (run + test + seed + snapshot)         |
+| `make debug`    | Test the dbt connection to DuckDB                      |
+| `make docs`     | Generate and serve dbt documentation                   |
+| `make clean`    | Remove `.venv`, `target/`, and other temporary files   |
 
 ---
 
