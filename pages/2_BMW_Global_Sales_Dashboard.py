@@ -36,7 +36,7 @@ st.markdown("Welcome to the BMW Global Sales analysis narrative. This dashboard 
 
 @st.cache_data
 def load_data():
-    with duckdb.connect('data/portfolio.duckdb', read_only=True) as con:
+    with duckdb.connect('data/app.duckdb', read_only=True) as con:
         return con.execute("SELECT * FROM mrt_bmw_global_sales").df()
 
 df = load_data()
