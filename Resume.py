@@ -64,10 +64,11 @@ def init_database():
     )
 
     # Projects
-    con.execute("CREATE TABLE projects (title VARCHAR, description VARCHAR, skills VARCHAR)")
-    con.executemany("INSERT INTO projects VALUES (?, ?, ?)", [
-        ("Automated Essay Scoring (Thesis)", "Built a deep learning model using Python, Word2Vec, and TensorFlow to score essays (±1,700 samples). Achieved 91.23% Kappa score on Kaggle Hewlett Foundation dataset.", "Python, Word2Vec, TensorFlow"),
-        ("Telehealth Cost-effectiveness Study (Paper)", "Demonstrated that telehealth-powered managed care was 7× more cost-effective than conventional care for Acute Respiratory Infection (ARI).", "Data Analysis, Publication")
+    con.execute("CREATE TABLE projects (title VARCHAR, description VARCHAR, skills VARCHAR, url VARCHAR)")
+    con.executemany("INSERT INTO projects VALUES (?, ?, ?, ?)", [
+        ("DataVerse AI Analyst Dashboard", "An intelligent analytics platform that leverages LLMs to provide automated insights, storytelling, and strategic recommendations from complex datasets. Features a proactive agentic framework for data exploration.", "Python, Streamlit, LLMs, Agent Development Kit (ADK), AI Engineering", "https://dataverse-appv2.streamlit.app/"),
+        ("Automated Essay Scoring (Thesis)", "Built a deep learning model using Python, Word2Vec, and TensorFlow to score essays (±1,700 samples). Achieved 91.23% Kappa score on Kaggle Hewlett Foundation dataset.", "Python, Word2Vec, TensorFlow", "https://drive.google.com/file/d/1gJnExAv1NCzscZ9PJ9VDgSPgkb8s6-7H/view?usp=sharing"),
+        ("Telehealth Cost-effectiveness Study (Paper)", "Demonstrated that telehealth-powered managed care was 7× more cost-effective than conventional care for Acute Respiratory Infection (ARI).", "Data Analysis, Publication", "https://drive.google.com/file/d/1PecpBASX9lJHY5WK_SQKr1oxhzeNxaLc/view?usp=drive_link")
     ])
 
     # Certifications
@@ -130,12 +131,12 @@ st.divider()
 # ──────────────────────────────────────────────
 # Main Content Tabs
 # ──────────────────────────────────────────────
-tab_exp, tab_skills, tab_edu, tab_proj, tab_cert = st.tabs([
+tab_exp, tab_proj, tab_cert, tab_skills, tab_edu = st.tabs([
     "💼 Experience", 
+    "📂 Projects", 
+    "📜 Certifications",
     "🛠️ Skills", 
     "🎓 Education", 
-    "📂 Projects", 
-    "📜 Certifications"
 ])
 
 with tab_exp:
@@ -171,13 +172,17 @@ with tab_edu:
 
 with tab_proj:
     st.subheader("Projects")
-    projects = con.execute("SELECT title, description, skills FROM projects").fetchall()
-    for title, desc, skills in projects:
+    projects = con.execute("SELECT title, description, skills, url FROM projects").fetchall()
+    for title, desc, skills, url in projects:
         skills_html = "".join([f"<span class='skill-tag'>{s.strip()}</span>" for s in skills.split(',')])
+        # Link in the title
+        clickable_title = f"<a href='{url}' target='_blank' style='text-decoration: none; color: #1e293b; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease;'>{title} 🔗</a>" if url else title
         floating_card(f"""
-            <strong>{title}</strong><br>
+            <div style='margin-bottom: 8px;'>
+                <strong style='font-size: 1.15rem;'>{clickable_title}</strong>
+            </div>
             {desc}
-            <div style='margin-top: 10px;'>{skills_html}</div>
+            <div style='margin-top: 12px;'>{skills_html}</div>
         """)
 
 with tab_cert:
