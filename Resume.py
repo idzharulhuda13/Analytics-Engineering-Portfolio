@@ -72,10 +72,10 @@ def init_database():
     ])
 
     # Certifications
-    con.execute("CREATE TABLE certifications (title VARCHAR, description VARCHAR)")
-    con.executemany("INSERT INTO certifications VALUES (?, ?)", [
-        ("Google Data Analytics Professional Certificate", "Proficient in data-driven decision-making, including cleaning, analyzing, and visualizing data to solve business problems."),
-        ("Microsoft Technology Associate: Database Fundamentals (MTA)", "Gained foundational knowledge in designing, querying, and managing databases with a focus on data integrity, security, and performance.")
+    con.execute("CREATE TABLE certifications (title VARCHAR, description VARCHAR, url VARCHAR)")
+    con.executemany("INSERT INTO certifications VALUES (?, ?, ?)", [
+        ("Google Data Analytics Professional Certificate", "Proficient in data-driven decision-making, including cleaning, analyzing, and visualizing data to solve business problems.", "https://www.coursera.org/account/accomplishments/specialization/certificate/ZR3UPFBES77R"),
+        ("Microsoft Technology Associate: Database Fundamentals (MTA)", "Gained foundational knowledge in designing, querying, and managing databases with a focus on data integrity, security, and performance.", "https://www.certiport.com/portal/Pages/PrintTranscriptInfo.aspx?action=Cert&id=132&cvid=nq44slXIg2zg3ddmnLS/EQ==")
     ])
 
     return con
@@ -187,11 +187,12 @@ with tab_proj:
 
 with tab_cert:
     st.subheader("Certifications")
-    certs = con.execute("SELECT title, description FROM certifications").fetchall()
-    for title, desc in certs:
+    certs = con.execute("SELECT title, description, url FROM certifications").fetchall()
+    for title, desc, url in certs:
+        clickable_title = f"<a href='{url}' target='_blank' style='text-decoration: none; color: #1e293b;'>{title} 🔗</a>" if url else title
         floating_card(f"""
-            <strong>{title}</strong><br>
-            {desc}
+            <strong style='font-size: 1.1rem;'>{clickable_title}</strong><br>
+            <div style='margin-top: 5px;'>{desc}</div>
         """)
 
 # Footer
