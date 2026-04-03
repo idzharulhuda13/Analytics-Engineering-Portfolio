@@ -131,9 +131,9 @@ st.divider()
 # ──────────────────────────────────────────────
 # Main Content Tabs
 # ──────────────────────────────────────────────
-tab_exp, tab_proj, tab_cert, tab_skills, tab_edu = st.tabs([
-    "💼 Experience", 
+tab_proj, tab_exp, tab_cert, tab_skills, tab_edu = st.tabs([
     "📂 Projects", 
+    "💼 Experience", 
     "📜 Certifications",
     "🛠️ Skills", 
     "🎓 Education", 
