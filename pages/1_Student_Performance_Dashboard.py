@@ -52,7 +52,7 @@ def clear_filters():
     st.session_state['f_lunch'] = df['lunch'].unique().tolist()
     st.session_state['f_prep'] = df['test_prep'].unique().tolist()
 
-st.sidebar.button("🔄 Reset Filters", on_click=clear_filters, use_container_width=True)
+st.sidebar.button("🔄 Reset Filters", on_click=clear_filters, width='stretch')
 
 gender_filter = st.sidebar.multiselect("Gender", options=df['gender'].unique().tolist(), default=df['gender'].unique().tolist(), key='f_gender')
 race_filter = st.sidebar.multiselect("Race / Ethnicity", options=sorted(df['race_ethnicity'].unique().tolist()), default=sorted(df['race_ethnicity'].unique().tolist()), key='f_race')
@@ -148,7 +148,7 @@ with tab_overview:
                 tooltip=[alt.Tooltip('count()', title='Students')]
             ).properties(height=350).interactive()
             
-            st.altair_chart(hist, use_container_width=True)
+            st.altair_chart(hist, width='stretch')
 
     with col_pass:
         st.markdown("**Insight:** Looking at the proportion of students passing (Overall Score ≥ 60).")
@@ -172,7 +172,7 @@ with tab_overview:
                 groupby=['test_prep', 'Status']
             ).properties(height=350)
             
-            st.altair_chart(bar_pf, use_container_width=True)
+            st.altair_chart(bar_pf, width='stretch')
 
 
 with tab_prep:
@@ -200,7 +200,7 @@ with tab_prep:
             tooltip=['test_prep:N', 'Subject:N', alt.Tooltip('Average Score:Q', format='.1f')]
         ).properties(height=350)
         
-        st.altair_chart(bar_prep, use_container_width=True)
+        st.altair_chart(bar_prep, width='stretch')
 
 
 with tab_socio:
@@ -229,7 +229,7 @@ with tab_socio:
                 tooltip=['lunch:N', alt.Tooltip('avg_score:Q', format='.1f')]
             ).properties(height=350).interactive()
             
-            st.altair_chart(density_lunch, use_container_width=True)
+            st.altair_chart(density_lunch, width='stretch')
 
     with col_br:
         with chart_container():
@@ -243,7 +243,7 @@ with tab_socio:
                 tooltip=['parental_education:N', alt.Tooltip('avg_score:Q', format='.1f')]
             ).properties(height=350)
             
-            st.altair_chart(bar_edu, use_container_width=True)
+            st.altair_chart(bar_edu, width='stretch')
 
 
 with tab_demo:
@@ -276,7 +276,7 @@ with tab_demo:
             )
         )
 
-        st.altair_chart(heat_chart + text, use_container_width=True)
+        st.altair_chart(heat_chart + text, width='stretch')
 
 
 with tab_syn:
@@ -302,7 +302,7 @@ with tab_syn:
             tooltip=['gender', 'race_ethnicity', 'lunch', 'test_prep', f'{scatter_x}', f'{scatter_y}', 'avg_score']
         ).properties(height=400).interactive()
         
-        st.altair_chart(scatter, use_container_width=True)
+        st.altair_chart(scatter, width='stretch')
 
 st.markdown("---")
 st.header("💡 Summary & Key Insights")

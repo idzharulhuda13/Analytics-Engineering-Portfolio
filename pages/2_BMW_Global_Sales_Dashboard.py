@@ -55,7 +55,7 @@ def clear_filters():
     st.session_state['f_region'] = df['region'].unique().tolist()
     st.session_state['f_model'] = df['model'].unique().tolist()
 
-st.sidebar.button("🔄 Reset Filters", on_click=clear_filters, use_container_width=True)
+st.sidebar.button("🔄 Reset Filters", on_click=clear_filters, width='stretch')
 
 year_filter = st.sidebar.multiselect("Year", options=sorted(df['year'].unique().tolist()), default=sorted(df['year'].unique().tolist()), key='f_year')
 region_filter = st.sidebar.multiselect("Region", options=sorted(df['region'].unique().tolist()), default=sorted(df['region'].unique().tolist()), key='f_region')
@@ -161,7 +161,7 @@ with tab_overview:
                 y='Units:Q'
             )
             
-            st.altair_chart(bar_units + line_units, use_container_width=True)
+            st.altair_chart(bar_units + line_units, width='stretch')
     
     with col_rev:
         with chart_container():
@@ -174,7 +174,7 @@ with tab_overview:
                 tooltip=[alt.Tooltip('year:O', title='Year'), alt.Tooltip('Revenue_B:Q', format=',.2f', title='Revenue (€B)')]
             ).properties(height=350)
             
-            st.altair_chart(bar_rev, use_container_width=True)
+            st.altair_chart(bar_rev, width='stretch')
 
     # Monthly trend
     with chart_container():
@@ -189,7 +189,7 @@ with tab_overview:
             tooltip=[alt.Tooltip('Date:T', title='Month'), alt.Tooltip('Units:Q', format=',', title='Units')]
         ).properties(height=300).interactive()
         
-        st.altair_chart(area_monthly, use_container_width=True)
+        st.altair_chart(area_monthly, width='stretch')
 
 
 with tab_regional:
@@ -220,7 +220,7 @@ with tab_regional:
                 tooltip=['region:N', alt.Tooltip('Units:Q', format=',', title='Units Sold'), alt.Tooltip('Revenue_B:Q', format=',.2f', title='Revenue (€B)')]
             ).properties(height=300)
             
-            st.altair_chart(bar_region, use_container_width=True)
+            st.altair_chart(bar_region, width='stretch')
     
     with col_rr:
         with chart_container():
@@ -234,7 +234,7 @@ with tab_regional:
                 tooltip=['region:N', alt.Tooltip('Avg_Price:Q', format=',.0f', title='Avg Price (€)')]
             ).properties(height=300)
             
-            st.altair_chart(bar_price, use_container_width=True)
+            st.altair_chart(bar_price, width='stretch')
     
     # Regional trend over time
     with chart_container():
@@ -248,7 +248,7 @@ with tab_regional:
             tooltip=['region:N', 'year:O', alt.Tooltip('Units:Q', format=',', title='Units')]
         ).properties(height=350).interactive()
         
-        st.altair_chart(line_region, use_container_width=True)
+        st.altair_chart(line_region, width='stretch')
 
 
 with tab_model:
@@ -280,7 +280,7 @@ with tab_model:
                 tooltip=['model:N', alt.Tooltip('Units:Q', format=',', title='Units'), alt.Tooltip('Avg_Price:Q', format=',.0f', title='Avg Price (€)')]
             ).properties(height=350)
             
-            st.altair_chart(bar_model, use_container_width=True)
+            st.altair_chart(bar_model, width='stretch')
     
     with col_mr:
         with chart_container():
@@ -294,7 +294,7 @@ with tab_model:
                 tooltip=['model:N', alt.Tooltip('Revenue_B:Q', format=',.2f', title='Revenue (€B)')]
             ).properties(height=350)
             
-            st.altair_chart(bar_rev_model, use_container_width=True)
+            st.altair_chart(bar_rev_model, width='stretch')
     
     # Model performance heatmap by region
     with chart_container():
@@ -319,7 +319,7 @@ with tab_model:
             )
         )
         
-        st.altair_chart(heat + text_heat, use_container_width=True)
+        st.altair_chart(heat + text_heat, width='stretch')
 
 
 with tab_ev:
@@ -350,7 +350,7 @@ with tab_ev:
                 tooltip=['year:O', 'Vehicle_Type:N', alt.Tooltip('Units:Q', format=',', title='Units')]
             ).properties(height=350)
             
-            st.altair_chart(stacked_ev, use_container_width=True)
+            st.altair_chart(stacked_ev, width='stretch')
     
     with col_er:
         with chart_container():
@@ -363,7 +363,7 @@ with tab_ev:
                 tooltip=['year:O', alt.Tooltip('BEV_Share_Pct:Q', format='.1f', title='BEV Share (%)')]
             ).properties(height=350)
             
-            st.altair_chart(line_bev, use_container_width=True)
+            st.altair_chart(line_bev, width='stretch')
     
     # EV models breakdown
     ev_models = filtered_df[filtered_df['is_bev']].groupby(['year', 'model']).agg(Units=('units_sold', 'sum')).reset_index()
@@ -377,7 +377,7 @@ with tab_ev:
                 tooltip=['year:O', 'model:N', alt.Tooltip('Units:Q', format=',', title='Units')]
             ).properties(height=300)
             
-            st.altair_chart(bar_ev, use_container_width=True)
+            st.altair_chart(bar_ev, width='stretch')
 
 
 with tab_macro:
@@ -417,7 +417,7 @@ with tab_macro:
                      alt.Tooltip(f'{macro_vs}:Q', format=',')]
         ).properties(height=400).interactive()
         
-        st.altair_chart(scatter_macro, use_container_width=True)
+        st.altair_chart(scatter_macro, width='stretch')
     
     # Premium Share by Region Over Time
     with chart_container():
@@ -431,7 +431,7 @@ with tab_macro:
             tooltip=['region:N', 'year:O', alt.Tooltip('Premium:Q', format='.1f', title='Premium Share (%)')]
         ).properties(height=350).interactive()
         
-        st.altair_chart(line_premium, use_container_width=True)
+        st.altair_chart(line_premium, width='stretch')
 
 st.markdown("---")
 st.header("💡 Summary & Key Insights")
