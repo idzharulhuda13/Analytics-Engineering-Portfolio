@@ -37,3 +37,6 @@ LLM.md
 # AI Agent Configuration
 .agents/
 .gemini/
+
+# Large Dashboards (Local Only)
+pages/3_Chocolate_Sales_Dashboard.py
